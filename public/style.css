@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Langar&display=swap');
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Langar';
+  background-color: #ffffff;
+  display: flex;
+  position: absolute;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  background-size: 100%;
+  opacity: 100;
+}
