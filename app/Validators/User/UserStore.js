@@ -4,8 +4,8 @@ class UserStore {
   get rules() {
     return {
       name: "required",
-      username: "required",
-      email: "required",
+      username: "required|unique:users",
+      email: "required|email|unique:users",
       password: "required",
       role_id: "required",
     };

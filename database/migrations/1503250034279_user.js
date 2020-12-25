@@ -10,7 +10,7 @@ class UserSchema extends Schema {
       table.string("secure_id").notNullable().unique();
       table.string("username", 80).notNullable().unique();
       table.string("name").notNullable();
-      table.string("active").default('true').notNullable();
+      table.string("active").default("true").notNullable();
       table.string("email", 254).notNullable().unique();
       table.string("password", 60).notNullable();
       table.timestamps();
