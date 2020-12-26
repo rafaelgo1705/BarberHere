@@ -1,33 +1,33 @@
-"use strict";
+'use strict';
 
-const Model = use("Model");
-const Hash = use("Hash");
+const Model = use('Model');
+const Hash = use('Hash');
 
 class User extends Model {
   static boot() {
     super.boot();
 
-    this.addHook("beforeSave", async (userInstance) => {
+    this.addHook('beforeSave', async userInstance => {
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password);
       }
     });
-    this.addHook("beforeCreate", "SecureIdHook.uuid");
+    this.addHook('beforeCreate', 'SecureIdHook.uuid');
   }
 
   static get hidden() {
-    return ["password", "id"];
+    return ['password', 'id'];
   }
 
   static get traits() {
     return [
-      "@provider:Adonis/Acl/HasRole",
-      "@provider:Adonis/Acl/HasPermission",
+      '@provider:Adonis/Acl/HasRole',
+      '@provider:Adonis/Acl/HasPermission',
     ];
   }
 
   tokens() {
-    return this.hasMany("App/Models/Token");
+    return this.hasMany('App/Models/Token');
   }
 }
 

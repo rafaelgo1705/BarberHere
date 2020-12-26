@@ -1,20 +1,24 @@
-"use strict";
+'use strict';
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use("Model");
+const Model = use('Model');
 
 class Company extends Model {
   static boot() {
     super.boot();
-    this.addHook("beforeCreate", "SecureIdHook.uuid");
+    this.addHook('beforeCreate', 'SecureIdHook.uuid');
   }
 
   static get table() {
-    return "companies";
+    return 'companies';
   }
 
   static get hidden() {
-    return ["id"];
+    return ['id'];
+  }
+
+  address() {
+    return this.hasMany('App/Models/Company/Address');
   }
 }
 
