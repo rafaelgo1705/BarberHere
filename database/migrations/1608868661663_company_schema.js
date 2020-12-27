@@ -8,7 +8,7 @@ class CompanySchema extends Schema {
     this.create('companies', table => {
       table.increments();
       table.string('secure_id').notNullable().unique();
-      table.string('person_type').notNullable();
+      table.enum('person_type', ['pf', 'pj']).notNullable();
       table.string('cpf_cnpj').notNullable().unique();
       table.string('company_name').notNullable();
       table.string('fantasy_name');
@@ -16,7 +16,7 @@ class CompanySchema extends Schema {
       table.string('telephone2');
       table.string('email').notNullable();
       table.string('obs');
-      table.string('active').default('true').notNullable();
+      table.boolean('active').default(true).notNullable();
       table
         .integer('user_id')
         .references('id')

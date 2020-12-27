@@ -21,7 +21,7 @@ class UserSeeder {
 
     await user.roles().attach([roleAdmin.id]);
 
-    //Users
+    // Users
     const createUsersPermission = new Permission();
     createUsersPermission.slug = "create_users";
     createUsersPermission.name = "Create Users";
@@ -71,17 +71,47 @@ class UserSeeder {
     deleteRolesPermission.description = "Delete Roles permission";
     await deleteRolesPermission.save();
 
+    // Companies
+    const createCompaniesPermission = new Permission();
+    createCompaniesPermission.slug = "create_companies";
+    createCompaniesPermission.name = "Create Companies";
+    createCompaniesPermission.description = "Create Companies permission";
+    await createCompaniesPermission.save();
+
+    const updateCompaniesPermission = new Permission();
+    updateCompaniesPermission.slug = "update_companies";
+    updateCompaniesPermission.name = "Update Companies";
+    updateCompaniesPermission.description = "Update Companies permission";
+    await updateCompaniesPermission.save();
+
+    const readCompaniesPermission = new Permission();
+    readCompaniesPermission.slug = "read_companies";
+    readCompaniesPermission.name = "Read Companies";
+    readCompaniesPermission.description = "Read Companies permission";
+    await readCompaniesPermission.save();
+
+    const deleteCompaniesPermission = new Permission();
+    deleteCompaniesPermission.slug = "delete_companies";
+    deleteCompaniesPermission.name = "Delete Companies";
+    deleteCompaniesPermission.description = "Delete Companies permission";
+    await deleteCompaniesPermission.save();
+
     await roleAdmin.permissions().attach([
-      //Users
+      // Users
       createUsersPermission.id,
       updateUsersPermission.id,
       deleteUsersPermission.id,
       readUsersPermission.id,
-      //Roles
+      // Roles
       createRolesPermission.id,
       updateRolesPermission.id,
       readRolesPermission.id,
       deleteRolesPermission.id,
+      // Companies
+      createCompaniesPermission.id,
+      updateCompaniesPermission.id,
+      readCompaniesPermission.id,
+      deleteCompaniesPermission.id,
     ]);
   }
 }

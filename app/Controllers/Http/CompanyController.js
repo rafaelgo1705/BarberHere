@@ -106,12 +106,12 @@ class CompanyController {
   async inactive({ params, response }) {
     const company = await Company.findBy('secure_id', params.secure_id);
     if (company) {
-      if (company.active === 'false') {
+      if (company.active === false) {
         response
           .status(406)
           .send({ message: 'Esta empresa já está desativada!' });
       } else {
-        company.merge({ active: 'false' });
+        company.merge({ active: false });
         await company.save();
         response.send({ message: 'Empresa desativada!' });
       }
@@ -123,10 +123,10 @@ class CompanyController {
   async active({ params, response }) {
     const company = await Company.findBy('secure_id', params.secure_id);
     if (company) {
-      if (company.active === 'true') {
+      if (company.active === true) {
         response.status(406).send({ message: 'Esta empresa já está ativa!' });
       } else {
-        company.merge({ active: 'true' });
+        company.merge({ active: true });
         await company.save();
         response.send({ message: 'Empresa ativada!' });
       }

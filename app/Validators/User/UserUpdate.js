@@ -3,10 +3,12 @@
 class UserUpdate {
   get rules() {
     const { secure_id } = this.ctx.params;
+    const user = this.ctx.auth.user;
+    const param = secure_id || secure_id !== undefined ? secure_id : user.secure_id
     return {
       name: "required",
-      username: `required|unique:users,username,secure_id,${secure_id}`,
-      email: `required|email|unique:users,email,secure_id,${secure_id}`,
+      username: `required|unique:users,username,secure_id,${param}`,
+      email: `required|email|unique:users,email,secure_id,${param}`,
       role_id: "required",
     };
   }

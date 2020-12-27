@@ -64,17 +64,32 @@ class UserController {
     }
   }
 
-  async index({ request }) {
+  async index({ request, auth }) {
     const page = request.get().page || 1;
     const perPage = request.get().perPage || 10;
 
-    const user = await User.query().paginate(page, perPage);
+    const user = await User.query()
+      .where('id', '!=', auth.user.id)
+      .with('roles', builder => {
+        builder.select('id', 'slug', 'name').with('permissions', builder => {
+          builder.select('id', 'slug', 'name');
+        });
+      })
+      .paginate(page, perPage);
 
     return user;
   }
 
-  async show({ params, response }) {
-    const user = await User.findBy('secure_id', params.secure_id);
+  async show({ params, response, auth }) {
+    const user = await User.query()
+      .where('id', '!=', auth.user.id)
+      .with('roles', builder => {
+        builder.select('id', 'slug', 'name').with('permissions', builder => {
+          builder.select('id', 'slug', 'name');
+        });
+      })
+      .where('secure_id', params.secure_id)
+      .first();
 
     if (user) {
       return user;
@@ -83,11 +98,36 @@ class UserController {
     }
   }
 
-  async update({ params, request, response }) {
+  async showUserAuth({ auth, response }) {
+    const user = await User.query()
+      .with('roles', builder => {
+        builder.select('id', 'slug', 'name').with('permissions', builder => {
+          builder.select('id', 'slug', 'name');
+        });
+      })
+      .where('id', auth.user.id)
+      .first();
+
+    if (user) {
+      return user;
+    } else {
+      response.status(404).send({ message: 'Usuário não existe!' });
+    }
+  }
+
+  async update({ params, request, response, auth }) {
     const data = request.only(['username', 'name', 'email']);
     const { role_id } = request.all();
 
-    const user = await User.findBy('secure_id', params.secure_id);
+    const user = await User.query()
+      .where('id', '!=', auth.user.id)
+      .with('roles', builder => {
+        builder.select('id', 'slug', 'name').with('permissions', builder => {
+          builder.select('id', 'slug', 'name');
+        });
+      })
+      .where('secure_id', params.secure_id)
+      .first();
 
     if (user) {
       const role = await Role.find(role_id);
@@ -103,14 +143,51 @@ class UserController {
     }
   }
 
-  async resetPassword({ params, request, response }) {
-    const data = request.only(['password']);
+  async updateUserAuth({ auth, request, response }) {
+    const data = request.only(['username', 'name', 'email']);
 
-    const user = await User.findBy('secure_id', params.secure_id);
+    const user = await User.query()
+      .with('roles', builder => {
+        builder.select('id', 'slug', 'name').with('permissions', builder => {
+          builder.select('id', 'slug', 'name');
+        });
+      })
+      .where('id', auth.user.id)
+      .first();
+
     if (user) {
       user.merge(data);
       await user.save();
       return user;
+    } else {
+      response.status(404).send({ message: 'Usuário não existe!' });
+    }
+  }
+
+  async resetPassword({ params, request, response, auth }) {
+    const data = request.only(['password']);
+
+    const user = await User.query()
+      .where('id', '!=', auth.user.id)
+      .where('secure_id', params.secure_id)
+      .first();
+    if (user) {
+      user.merge(data);
+      await user.save();
+      response.send({ message: 'Senha alterada!' });
+    } else {
+      response.status(404).send({ message: 'Usuário não existe!' });
+    }
+  }
+
+  async resetPasswordUserAuth({ auth, request, response }) {
+    const data = request.only(['password']);
+
+    const user = await User.findBy('id', auth.user.id);
+    if (user) {
+      user.merge(data);
+      await user.save();
+      response.send({ message: 'Senha alterada!' });
     } else {
       response.status(404).send({ message: 'Usuário não existe!' });
     }
