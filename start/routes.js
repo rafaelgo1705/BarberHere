@@ -30,8 +30,12 @@ Route.group(() => {
   // ROLES
   Route.get('/role', 'RoleController.index');
   Route.get('/role/:id', 'RoleController.show');
-  Route.post('/role', 'RoleController.store');
-  Route.put('/role/:id', 'RoleController.update');
+  Route.post('/role', 'RoleController.store').validator(
+    'App/Validators/Role/RoleStore'
+  );
+  Route.put('/role/:id', 'RoleController.update').validator(
+    'App/Validators/Role/RoleUpdate'
+  );
   Route.delete('/role/:id', 'RoleController.destroy');
 
   // COMPANIES
