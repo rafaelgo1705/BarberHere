@@ -49,4 +49,16 @@ Route.group(() => {
   );
   Route.put('/company/inactive/:secure_id', 'CompanyController.inactive');
   Route.put('/company/active/:secure_id', 'CompanyController.active');
+
+  // SERVICES/PRODUCTS
+  Route.post('/serv_prod', 'ServProdController.store').validator(
+    'App/Validators/ServProd/ServProdStore'
+  );
+  Route.get('/serv_prod', 'ServProdController.index');
+  Route.get('/serv_prod/:secure_id', 'ServProdController.show');
+  Route.put('/serv_prod/:secure_id', 'ServProdController.update').validator(
+    'App/Validators/ServProd/ServProdUpdate'
+  );
+  Route.put('/serv_prod/inactive/:secure_id', 'ServProdController.inactive');
+  Route.put('/serv_prod/active/:secure_id', 'ServProdController.active');
 }).middleware('auth');
