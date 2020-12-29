@@ -15,6 +15,10 @@ class ServProd extends Model {
   static get hidden() {
     return ['id'];
   }
+
+  company() {
+    return this.belongsTo('App/Models/Company/Company');
+  }
 }
 
 module.exports = ServProd;
