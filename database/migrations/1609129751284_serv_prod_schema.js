@@ -12,6 +12,7 @@ class ServProdSchema extends Schema {
       table.string('name').notNullable();
       table.string('time');
       table.string('measurement');
+      table.string('quantity');
       table.string('value').notNullable();
       table.boolean('active').default(true).notNullable();
       table

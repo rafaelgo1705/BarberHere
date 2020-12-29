@@ -38,7 +38,14 @@ class ServProdController {
   }
 
   async store({ request, response }) {
-    const data = request.only(['type', 'name', 'measurement', 'time', 'value']);
+    const data = request.only([
+      'type',
+      'name',
+      'measurement',
+      'time',
+      'value',
+      'quantity',
+    ]);
     const { company_id } = request.only(['company_id']);
 
     const company = await Company.findBy('secure_id', company_id);
@@ -58,7 +65,14 @@ class ServProdController {
   }
 
   async update({ params, request, response }) {
-    const data = request.only(['type', 'name', 'measurement', 'time', 'value']);
+    const data = request.only([
+      'type',
+      'name',
+      'measurement',
+      'time',
+      'value',
+      'quantity',
+    ]);
 
     const servProd = await ServProd.query()
       .where('secure_id', params.secure_id)
