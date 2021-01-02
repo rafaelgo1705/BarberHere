@@ -50,6 +50,12 @@ Route.group(() => {
   Route.put('/company/inactive/:secure_id', 'CompanyController.inactive');
   Route.put('/company/active/:secure_id', 'CompanyController.active');
 
+  // COMPANIES TIME
+  Route.post('/company_time', 'CompanyController.storeTime');
+  Route.put('/company_time/:id', 'CompanyController.updateTime');
+  Route.get('/company_time', 'CompanyController.showTime');
+  Route.delete('/company_time/:id', 'CompanyController.deleteTime');
+
   // SERVICES/PRODUCTS
   Route.post('/serv_prod', 'ServProdController.store').validator(
     'App/Validators/ServProd/ServProdStore'

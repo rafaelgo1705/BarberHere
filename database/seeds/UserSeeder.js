@@ -19,6 +19,12 @@ class UserSeeder {
     roleAdmin.description = "Manage Administration Privileges";
     await roleAdmin.save();
 
+    const roleClient = new Role();
+    roleClient.name = "Client";
+    roleClient.slug = "client";
+    roleClient.description = "Manage Client Privileges";
+    await roleClient.save();
+
     await user.roles().attach([roleAdmin.id]);
 
     // Users
@@ -113,6 +119,10 @@ class UserSeeder {
       readCompaniesPermission.id,
       deleteCompaniesPermission.id,
     ]);
+
+    await roleClient.permissions().attach([
+      readCompaniesPermission.id,
+    ])
   }
 }
 

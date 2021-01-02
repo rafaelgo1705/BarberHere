@@ -2,6 +2,7 @@
 
 const Company = use('App/Models/Company/Company');
 const CompanyAddress = use('App/Models/Company/Address');
+const CompanyTime = use('App/Models/Company/Time');
 
 class CompanyController {
   async index({ request }) {
@@ -132,6 +133,81 @@ class CompanyController {
       }
     } else {
       response.status(404).send({ message: 'Empresa não existe!' });
+    }
+  }
+
+  // COMPANY TIME
+  async storeTime({ response, request }) {
+    const data = request.only([
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+      'days_exception',
+    ]);
+
+    const { company_id } = request.only(['company_id']);
+
+    const company = (await Company.findBy('secure_id', company_id)) || null;
+    if (company) {
+      return await CompanyTime.create({
+        ...data,
+        company_id: company.id,
+      });
+    } else {
+      response.status(404).send({ message: 'Empresa não existe!' });
+    }
+  }
+
+  async showTime({ response, request }) {
+    const company_id = request.get().company_id || null;
+
+    const company = (await Company.findBy('secure_id', company_id)) || null;
+
+    if (company) {
+      const companyTime =
+        (await CompanyTime.findBy('company_id', company.id)) || null;
+      if (companyTime) {
+        return await companyTime;
+      } else {
+        response.status(404).send({ message: 'Nenhum horário cadastrado!' });
+      }
+    } else {
+      response.status(404).send({ message: 'Empresa não existe!' });
+    }
+  }
+
+  async updateTime({ params, response, request }) {
+    const data = request.only([
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+      'days_exception',
+    ]);
+    const companyTime = (await CompanyTime.find(params.id)) || null;
+    if (companyTime) {
+      companyTime.merge(data);
+      await companyTime.save();
+      return companyTime;
+    } else {
+      response.status(404).send({ message: 'Nenhum horário encontrado!' });
+    }
+  }
+
+  async deleteTime({ params, response }) {
+    const companyTime = (await CompanyTime.find(params.id)) || null;
+    if (companyTime) {
+      await companyTime.delete();
+      response.send({ message: 'Horário apagado!' });
+    } else {
+      response.status(404).send({ message: 'Nenhum horário encontrado!' });
     }
   }
 }
