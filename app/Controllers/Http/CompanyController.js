@@ -153,10 +153,18 @@ class CompanyController {
 
     const company = (await Company.findBy('secure_id', company_id)) || null;
     if (company) {
-      return await CompanyTime.create({
-        ...data,
-        company_id: company.id,
-      });
+      const companyTime = await CompanyTime.findBy('company_id', company.id);
+
+      if (companyTime) {
+        response
+          .status(406)
+          .send({ message: 'Esta empresa já possui um horário cadastrado!' });
+      } else {
+        return await CompanyTime.create({
+          ...data,
+          company_id: company.id,
+        });
+      }
     } else {
       response.status(404).send({ message: 'Empresa não existe!' });
     }
